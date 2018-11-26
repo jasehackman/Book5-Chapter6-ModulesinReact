@@ -6,6 +6,11 @@ import EmployeeList from './employee/employeeList'
 import OwnersList from './owners/owners'
 import apiCalls from "../modules/apiCalls"
 
+import AnimalManager from "../modules/AnimalManager"
+import OwnerManager from "../modules/OwnerManager"
+import LocationManager from "../modules/LocationManager"
+import EmployeeManager from "../modules/EmployeeManager"
+
 
 class ApplicationViews extends Component {
 
@@ -20,15 +25,41 @@ class ApplicationViews extends Component {
   componentDidMount() {
     const newState = {}
 
-    apiCalls.getAll("animals")
-      .then (animals => newState.animals = animals)
-      .then(() => apiCalls.getAll("employees"))
-      .then (employees => newState.employees = employees)
-        .then(() => apiCalls.getAll("locations")
-         .then (locations => newState.locations = locations))
-            .then(() => apiCalls.getAll("owners")
-            .then (owners => newState.owners = owners))
-              .then(() => this.setState(newState))
+    AnimalManager.getAllAnimals()
+      .then(allAnimals => {
+        this.setState({
+          animals: allAnimals
+        })
+      })
+      .then(EmployeeManager.getAllEmployees()
+      .then(allEmployees => {
+        this.setState({
+          employees: allEmployees
+        })
+      }))
+      .then(LocationManager.getAllLocations()
+      .then(allLocations => {
+        this.setState({
+          locations: allLocations
+        })
+      }))
+      .then(OwnerManager.getAllOwners()
+      .then(allOwners => {
+        this.setState({
+          owners: allOwners
+        })
+      }))
+
+
+    // apiCalls.getAll("animals")
+    //   .then (animals => newState.animals = animals)
+    //   .then(() => apiCalls.getAll("employees"))
+    //   .then (employees => newState.employees = employees)
+    //     .then(() => apiCalls.getAll("locations")
+    //      .then (locations => newState.locations = locations))
+    //         .then(() => apiCalls.getAll("owners")
+    //         .then (owners => newState.owners = owners))
+    //           .then(() => this.setState(newState))
   }
 
   delete = (dataName, id) => {
